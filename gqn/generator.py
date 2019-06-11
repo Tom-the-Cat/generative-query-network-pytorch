@@ -37,10 +37,10 @@ class Conv2dLSTMCell(nn.Module):
 
         kwargs = dict(kernel_size=kernel_size, stride=stride, padding=padding)
 
-        self.forget = nn.Conv2d(in_channels, out_channels, **kwargs)
-        self.input  = nn.Conv2d(in_channels, out_channels, **kwargs)
-        self.output = nn.Conv2d(in_channels, out_channels, **kwargs)
-        self.state  = nn.Conv2d(in_channels, out_channels, **kwargs)
+        self.forget = nn.Conv2d(out_channels + in_channels, out_channels, **kwargs)
+        self.input  = nn.Conv2d(out_channels + in_channels, out_channels, **kwargs)
+        self.output = nn.Conv2d(out_channels + in_channels, out_channels, **kwargs)
+        self.state  = nn.Conv2d(out_channels + in_channels, out_channels, **kwargs)
 
     def forward(self, input, states):
         """
@@ -51,6 +51,8 @@ class Conv2dLSTMCell(nn.Module):
         :return new (hidden, cell) pair
         """
         (hidden, cell) = states
+        
+        input = torch.cat([hidden, input], dim=1)
 
         forget_gate = torch.sigmoid(self.forget(input))
         input_gate  = torch.sigmoid(self.input(input))
