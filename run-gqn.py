@@ -55,7 +55,7 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(model.parameters(), lr=5 * 10 ** (-4))
 
     # Rate annealing schemes
-    sigma_scheme = Annealer(2.0, 0.7, 2 * 10 ** 5)
+    sigma_scheme = Annealer(2.0/16, 0.7/16, 2 * 10 ** 5)
     mu_scheme = Annealer(5 * 10 ** (-4), 5 * 10 ** (-5), 1.6 * 10 ** 6)
 
     # Load the dataset
